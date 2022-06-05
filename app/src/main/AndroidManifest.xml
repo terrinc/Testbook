@@ -4,6 +4,7 @@
     package="com.terrinc.testbook">
 
     <application
+        android:name=".core.TestBookApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
