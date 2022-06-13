@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.terrinc.testbook">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    
     <application
         android:name=".core.TestBookApp"
         android:allowBackup="true"
