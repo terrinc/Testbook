@@ -11,6 +11,8 @@ import com.terrinc.testbook.data.cache.RealmProvider
 import com.terrinc.testbook.data.net.BookCloudMapper
 import com.terrinc.testbook.data.net.BooksService
 import retrofit2.Retrofit
+import com.terrinc.testbook.domain.BaseBooksDataToDomainMapper
+import com.terrinc.testbook.domain.BooksInteractor
 
 class TestBookApp : Application() {
 
@@ -33,6 +35,7 @@ class TestBookApp : Application() {
             booksCloudMapper,
             booksCacheMapper,
         )
+        val interactor = BooksInteractor.Base(booksRepository, BaseBooksDataToDomainMapper())
     }
 
     private companion object {
