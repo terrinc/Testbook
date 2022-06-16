@@ -10,6 +10,7 @@ import com.terrinc.testbook.domain.BooksDomainToUiMapper
 import com.terrinc.testbook.domain.BooksInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val booksInteractor: BooksInteractor,
@@ -18,9 +19,11 @@ class MainViewModel(
 ) : ViewModel() { // todo interface
 
     fun fetchBooks() = viewModelScope.launch(Dispatchers.IO) {
-        val result = booksInteractor.fetchBooks().map(mapper)
-        Dispatchers.Main.run {
-            result.map(Abstract.Mapper.Empty())
+        val resultDomain = booksInteractor.fetchBooks()
+        withContext(Dispatchers.Main) {
+            val resultUi = resultDomain.map(mapper)
+            resultUi.map(Abstract.Mapper.Empty())
+
         }
     }
 

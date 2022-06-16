@@ -3,6 +3,7 @@ package com.terrinc.testbook.presentation
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.terrinc.testbook.R
 import com.terrinc.testbook.core.Book
@@ -25,11 +26,14 @@ class BibleAdapter : RecyclerView.Adapter<BibleAdapter.BibleViewHolder>() {
         return BibleViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: BibleViewHolder, position: Int) {
-        TODO("Not yet implemented")
-    }
+    override fun onBindViewHolder(holder: BibleViewHolder, position: Int) =
+        holder.bind(books[position])
 
     override fun getItemCount() = books.size
 
-    inner class BibleViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    inner class BibleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bind(book: Book) {
+            itemView.findViewById<TextView>(R.id.textView).text = book.name
+        }
+    }
 }
