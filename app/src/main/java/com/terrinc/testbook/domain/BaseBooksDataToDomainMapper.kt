@@ -1,9 +1,9 @@
 package com.terrinc.testbook.domain
 
-import com.terrinc.testbook.core.Book
+import com.terrinc.testbook.data.BookData
 import com.terrinc.testbook.data.BooksDataToDomainMapper
 
-class BaseBooksDataToDomainMapper : BooksDataToDomainMapper {
-    override fun map(books: List<Book>) = BooksDomain.Success(books)
+class BaseBooksDataToDomainMapper(private val bookMapper: BookDataToDomainMapper) : BooksDataToDomainMapper {
+    override fun map(books: List<BookData>) = BooksDomain.Success(books, bookMapper)
     override fun map(exception: Exception) = BooksDomain.Fail(exception)
 }

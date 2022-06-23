@@ -3,34 +3,23 @@ package com.terrinc.testbook.presentation
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.terrinc.testbook.core.Book
+import com.terrinc.testbook.core.Abstract
 
-interface BooksCommunication {
+interface BooksCommunication : Abstract.Mapper {
 
-    fun show(books: List<Book>)
-    fun show(errorMessage: String)
-
-    fun observeSuccess(owner: LifecycleOwner, observer: Observer<List<Book>>)
-    fun observeFail(owner: LifecycleOwner, observer: Observer<String>)
+    fun map(books: List<BookUi>)
+    fun observe(owner: LifecycleOwner, observer: Observer<List<BookUi>>)
 
     class Base : BooksCommunication {
-        private val successLiveData = MutableLiveData<List<Book>>()
-        private val failLiveData = MutableLiveData<String>()
+        private val listLiveData = MutableLiveData<List<BookUi>>()
 
-        override fun show(books: List<Book>) {
-            successLiveData.value = books
+        override fun map(books: List<BookUi>) {
+            listLiveData.value = books
         }
 
-        override fun show(errorMessage: String) {
-            failLiveData.value = errorMessage
+        override fun observe(owner: LifecycleOwner, observer: Observer<List<BookUi>>) {
+            listLiveData.observe(owner, observer)
         }
 
-        override fun observeSuccess(owner: LifecycleOwner, observer: Observer<List<Book>>) {
-            successLiveData.observe(owner, observer)
-        }
-
-        override fun observeFail(owner: LifecycleOwner, observer: Observer<String>) {
-            failLiveData.observe(owner, observer)
-        }
     }
 }

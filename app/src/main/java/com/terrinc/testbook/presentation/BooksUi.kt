@@ -2,32 +2,37 @@ package com.terrinc.testbook.presentation
 
 import com.terrinc.testbook.R
 import com.terrinc.testbook.core.Abstract
-import com.terrinc.testbook.core.Book
+import com.terrinc.testbook.domain.BookDomain
+import com.terrinc.testbook.domain.BookDomainToUiMapper
+import com.terrinc.testbook.domain.BooksDomainToUiMapper
 import com.terrinc.testbook.domain.ErrorType
 
-sealed class BooksUi : Abstract.Object<Unit, Abstract.Mapper.Empty>() {
+sealed class BooksUi : Abstract.Object<Unit, BooksCommunication> {
 
     class Success(
-        private val books: List<Book>,
-        private val communication: BooksCommunication,
+        private val books: List<BookDomain>,
+        private val bookMapper: BookDomainToUiMapper
     ) : BooksUi() {
-        override fun map(mapper: Abstract.Mapper.Empty) {
-            communication.show(books)
+        override fun map(mapper: BooksCommunication) {
+            val booksUi = books.map { bookDomain ->
+                bookDomain.map(bookMapper)
+            }
+            mapper.map(booksUi)
         }
     }
 
     class Fail(
         private val errorType: ErrorType,
-        private val communication: BooksCommunication,
         private val resourceProvider: ResourceProvider,
     ) : BooksUi() {
-        override fun map(mapper: Abstract.Mapper.Empty) {
-            val messageId = when(errorType) { //todo move to other class
+        override fun map(mapper: BooksCommunication) {
+            val messageId = when(errorType) {
                 ErrorType.NO_CONNECTION -> R.string.no_connection_message
                 ErrorType.SERVICE_UNAVAILABLE -> R.string.service_unavailable_message
                 else -> R.string.something_went_wrong
             }
-            communication.show(resourceProvider.getString(messageId))
+            val message = resourceProvider.getString(messageId)
+            mapper.map(listOf(BookUi.Fail(message)))
         }
     }
 }
