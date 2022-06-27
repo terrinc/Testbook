@@ -2,19 +2,30 @@ package com.terrinc.testbook.domain
 
 import com.terrinc.testbook.core.Abstract
 import com.terrinc.testbook.data.BookData
+import com.terrinc.testbook.data.TestamentTemp
 import com.terrinc.testbook.presentation.BooksUi
 import retrofit2.HttpException
 import java.net.UnknownHostException
 
 sealed class BooksDomain : Abstract.Object<BooksUi, BooksDomainToUiMapper> {
 
-    class Success(
+    data class Success(
         private val books: List<BookData>,
         private val bookMapper: BookDataToDomainMapper,
     ) : BooksDomain() {
         override fun map(mapper: BooksDomainToUiMapper): BooksUi {
-            val booksDomain = books.map { bookData ->
-                bookData.map(bookMapper)
+            val temp = TestamentTemp.Base()
+            val booksDomain = mutableListOf<BookDomain>()
+            books.forEach { bookData ->
+                if (!bookData.compare(temp)) {
+                    if (temp.isEmpty()) {
+                        booksDomain.add(BookDomain.Testament(TestamentType.OLD))
+                    } else {
+                        booksDomain.add(BookDomain.Testament(TestamentType.NEW))
+                    }
+                    bookData.saveTestament(temp)
+                }
+                booksDomain.add(bookData.map(bookMapper))
             }
             return mapper.map(booksDomain)
         }

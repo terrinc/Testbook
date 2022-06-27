@@ -1,7 +1,15 @@
 package com.terrinc.testbook.presentation
 
+import com.terrinc.testbook.R
 import com.terrinc.testbook.domain.BookDomainToUiMapper
+import com.terrinc.testbook.domain.TestamentType
 
-class BaseBookDomainToUiMapper: BookDomainToUiMapper {
-    override fun map(id: Int, name: String) = BookUi.Base(id, name)
+class BaseBookDomainToUiMapper(private val resourceProvider: ResourceProvider) : BookDomainToUiMapper {
+    override fun map(id: Int, name: String): BookUi {
+        return when (id) {
+            TestamentType.NEW.getId() -> BookUi.Testament(id, resourceProvider.getString(R.string.new_testament))
+            TestamentType.OLD.getId() -> BookUi.Testament(id, resourceProvider.getString(R.string.old_testament))
+            else -> BookUi.Base(id, name)
+        }
+    }
 }

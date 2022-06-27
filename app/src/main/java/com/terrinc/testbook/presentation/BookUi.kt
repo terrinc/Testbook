@@ -8,12 +8,16 @@ sealed class BookUi : Abstract.Object<Unit, BookUi.StringMapper> {
 
     object Process : BookUi()
 
-    class Base(
-        private val id: Int, // todo use for getting chapters
+    abstract class Info(
+        private val id: Int,
         private val name: String,
     ) : BookUi() {
         override fun map(mapper: StringMapper) = mapper.map(name)
     }
+
+    class Base(id: Int, name: String) : Info(id, name)
+
+    class Testament(id: Int, name: String) : Info(id, name)
 
     class Fail(
         private val message: String,
@@ -22,7 +26,7 @@ sealed class BookUi : Abstract.Object<Unit, BookUi.StringMapper> {
     }
 
     // todo improve later
-    interface StringMapper: Abstract.Mapper {
+    interface StringMapper : Abstract.Mapper {
         fun map(text: String)
     }
 }

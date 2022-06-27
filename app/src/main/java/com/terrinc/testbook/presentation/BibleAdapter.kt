@@ -21,17 +21,19 @@ class BibleAdapter(private val retry: Retry) : RecyclerView.Adapter<BibleAdapter
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-        0 -> BibleViewHolder.Base(R.layout.book_item.makeView(parent))
-        1 -> BibleViewHolder.FullScreenFail(R.layout.fail_fullscreen.makeView(parent), retry)
+        BASE -> BibleViewHolder.Base(R.layout.book_item.makeView(parent))
+        TESTAMENT -> BibleViewHolder.Base(R.layout.testament_item.makeView(parent))
+        FAIL -> BibleViewHolder.FullScreenFail(R.layout.fail_fullscreen.makeView(parent), retry)
         else -> BibleViewHolder.FullScreenProgress(R.layout.progress_fullscreen.makeView(parent))
     }
 
     override fun getItemViewType(position: Int) = when (books[position]) {
-        is BookUi.Base -> 0
-        is BookUi.Fail -> 1
-        is BookUi.Process -> 2
+        is BookUi.Testament -> TESTAMENT
+        is BookUi.Base -> BASE
+        is BookUi.Fail -> FAIL
+        is BookUi.Process -> PROGRESS
+        else -> -1
     }
-
 
     override fun onBindViewHolder(holder: BibleViewHolder, position: Int) =
         holder.bind(books[position])
@@ -74,6 +76,13 @@ class BibleAdapter(private val retry: Retry) : RecyclerView.Adapter<BibleAdapter
 
     interface Retry {
         fun tryAgain()
+    }
+
+    companion object {
+        private const val BASE = 0
+        private const val TESTAMENT = 1
+        private const val FAIL = 2
+        private const val PROGRESS = 3
     }
 }
 

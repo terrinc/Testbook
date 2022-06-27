@@ -57,9 +57,10 @@ class TestBookApp : Application() {
         val bookMapper = BaseBookDataToDomainMapper()
         val interactor = BooksInteractor.Base(booksRepository, BaseBooksDataToDomainMapper(bookMapper))
         val communication = BooksCommunication.Base()
+        val resourceProvider = ResourceProvider.Base(this)
         mainViewModel = MainViewModel(
             booksInteractor = interactor,
-            mapper = BaseBooksDomainToUiMapper(ResourceProvider.Base(this), BaseBookDomainToUiMapper()),
+            mapper = BaseBooksDomainToUiMapper(resourceProvider, BaseBookDomainToUiMapper(resourceProvider)),
             communication = communication,
         )
     }
