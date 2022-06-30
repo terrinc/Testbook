@@ -2,6 +2,7 @@ package com.terrinc.testbook
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.terrinc.testbook.core.TestBookApp
 import com.terrinc.testbook.presentation.BibleAdapter
@@ -19,7 +20,11 @@ class MainActivity : AppCompatActivity() {
                 viewModel.fetchBooks()
             }
         })
-        recyclerView.adapter = adapter
+        with(recyclerView){
+            this.adapter = adapter
+            addItemDecoration(DividerItemDecoration(this@MainActivity, DividerItemDecoration.VERTICAL))
+        }
+
 
         viewModel.observe(this) { books ->
             adapter.update(books)

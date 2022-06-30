@@ -5,7 +5,7 @@ import com.terrinc.testbook.data.cache.BookDb
 import com.terrinc.testbook.domain.BookDataToDomainMapper
 import com.terrinc.testbook.domain.BookDomain
 
-class BookData(
+data class BookData(
     private val id: Int,
     private val name: String,
     private val testament: String,
